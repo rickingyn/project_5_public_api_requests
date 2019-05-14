@@ -47,10 +47,6 @@ function addUsers(data) {
 
     gallery.innerHTML += html;
 
-
-    document.querySelector('.card').addEventListener('click', event => {
-        document.querySelector('.modal').style.display = "block";
-    });
 }
 
 function usersDetailDisplay(data) {
@@ -62,36 +58,39 @@ function usersDetailDisplay(data) {
     const dob = data.results[0].dob;
 
     const html = `
-        <div class="modal-container">
-            <div class="modal">
-                <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-                <div class="modal-info-container">
-                    <img class="modal-img" src="${image}" alt="profile picture">
-                    <h3 id="name" class="modal-name cap">${name}</h3>
-                    <p class="modal-text">${email}</p>
-                    <p class="modal-text cap">${location.city}</p>
-                    <hr>
-                    <p class="modal-text">${cellphone}</p>
-                    <p class="modal-text">${location.street}, ${location.city}, ${location.state} ${location.postcode}</p>
-                    <p class="modal-text">Birthday: ${dob.date}</p>
-            </div>
+        <div class="modal">
+            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+                <img class="modal-img" src="${image}" alt="profile picture">
+                <h3 id="name" class="modal-name cap">${name}</h3>
+                <p class="modal-text">${email}</p>
+                <p class="modal-text cap">${location.city}</p>
+                <hr>
+                <p class="modal-text">${cellphone}</p>
+                <p class="modal-text">${location.street}, ${location.city}, ${location.state} ${location.postcode}</p>
+                <p class="modal-text">Birthday: ${dob.date}</p>
         </div>
     `;
 
+    document.querySelector('.modal-container').innerHTML += html;
+}
+
+function createModalDiv() {
     const div = document.createElement('div');
-    div.className = "modal";
-    document.querySelector('body').insertBefore(div, gallery.nextElementSibling)
-    const modal = document.querySelector('.modal');
-
-    modal.innerHTML = html;
-    modal.style.display = "none";
-
-    document.querySelector('#modal-close-btn').addEventListener('click', () => { 
-        modal.style.display = "none";
-    });
-
+    div.className = "modal-container";
+    div.style.display = 'none';
+    document.querySelector('body').insertBefore(div, gallery.nextElementSibling);
 }
 
 createUsers();
+createModalDiv();
 
 
+document.body.addEventListener('click',  event => {
+    console.log(event.target)
+});
+
+
+document.querySelector('.card').addEventListener('click', event => {
+    document.querySelector('.modal').style.display = "block";
+});
