@@ -4,7 +4,7 @@ const gallery = document.querySelector('#gallery');
 const englishNationalities =  'au,br,ca,ch,de,dk,es,fi,fr,gb,ie,no,nl,nz,us';
 const employeesUrl = `https://randomuser.me/api/?nat=${englishNationalities}`;
 
-// invoke function to create modal container
+// invoke function to create modal container and search form
 createModalDiv();
 createSearch();
 
@@ -108,6 +108,7 @@ function usersDetailDisplay(data) {
     document.querySelector('.modal-container').innerHTML += html;
 }
 
+// create search form and append to html
 function createSearch() {
     const html = `
         <form action="#" method="get">
@@ -115,7 +116,6 @@ function createSearch() {
             <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
         </form>
     `;
-
     document.querySelector('.search-container').innerHTML = html;
 }
 
@@ -149,3 +149,19 @@ document.querySelector('.modal-container').addEventListener('click', event => {
     }
 });
 
+/**
+ * add event listener to search form to dynamically filter directory
+ */
+document.querySelector('#search-input').addEventListener('keyup', event => {
+    const name = document.querySelectorAll('#name');
+    const searchValue = event.target.value.toLowerCase();
+
+    name.forEach(name => {
+        if(!name.textContent.includes(searchValue)) {
+            name.parentNode.parentNode.style.display = 'none';
+        } else {
+            name.parentNode.parentNode.style.display = 'block';
+        }
+
+    });
+});
