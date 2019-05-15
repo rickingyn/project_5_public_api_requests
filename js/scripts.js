@@ -4,9 +4,10 @@ const gallery = document.querySelector('#gallery');
 const englishNationalities =  'au,br,ca,ch,de,dk,es,fi,fr,gb,ie,no,nl,nz,us';
 const employeesUrl = `https://randomuser.me/api/?nat=${englishNationalities}`;
 
-// invoke function to create modal container and search form
+// invoke function to create modal container, search form and modal toggle
 createModalDiv();
 createSearch();
+addModalToggle();
 
 // fetch data from API for 12 users on load; call functions to add user to gallery and modal
 // call catch method to handle any other errors that will occur 
@@ -119,6 +120,19 @@ function createSearch() {
     document.querySelector('.search-container').innerHTML = html;
 }
 
+function addModalToggle() {
+    const div = document.createElement('div');
+    div.className = 'modal-btn-container';
+
+    const html = `
+        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+        <button type="button" id="modal-next" class="modal-next btn">Next</button>
+    `;
+
+    div.innerHTML = html;
+    document.querySelector('.modal-container').appendChild(div);
+}
+
 /**
  * add event listener to open modal when name or image is clicked
  * checks modal to match selected user's name and display users detail
@@ -138,14 +152,37 @@ gallery.addEventListener('click', event => {
 });
 
 /**
- * add event listener to modal container; close user's details display
- * if close button is clicked, loop through all modal and set display to none
- * set display to modal container to none
+ * add event listener to modal container
+ * if 'X' button is clicked, close modal
+ * if 'Prev' button is clicked, hide current users detail and show previous
+ * if 'Next' button is clicked, hide current users detail and display next
  */
 document.querySelector('.modal-container').addEventListener('click', event => {
-    if(event.target.tagName === 'BUTTON' || event.target.textContent === 'X') {
+    const users = document.querySelectorAll('.modal');
+
+    if(event.target.textContent === 'X') {
         document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
         document.querySelector('.modal-container').style.display = 'none';
+    }
+    
+    if(event.target.textContent === 'Prev') {
+        users.forEach(user => {
+            if(user.style.display === 'block' && user.previousElementSibling.style.display === 'none') {
+                user.style.display = 'none';
+                user.previousElementSibling.style.display = 'block';
+            }
+        });   
+    }
+
+    if(event.target.textContent === 'Next') {
+        for(let i = 0; i < users.length; i++) {
+            if(users[i].style.display === 'block' && users[i].nextElementSibling !== null && users[i].nextElementSibling.style.display === 'none') {
+
+                users[i].style.display = 'none';
+                users[i].nextElementSibling.style.display = 'block';
+                break;
+            } 
+        }
     }
 });
 
@@ -165,3 +202,4 @@ document.querySelector('#search-input').addEventListener('keyup', event => {
 
     });
 });
+
