@@ -1,13 +1,23 @@
 const gallery = document.querySelector('#gallery');
 
+// add query string to API URL to retrieve a user nationality that will only return data in the English alphabet
+const englishNationalities =  'au,br,ca,ch,de,dk,es,fi,fr,gb,ie,no,nl,nz,us';
+const employeesUrl = `https://randomuser.me/api/?nat=${englishNationalities}`;
+
+// invoke function to create modal container
+createModalDiv();
+createSearch();
+
 // fetch data from API for 12 users on load; call functions to add user to gallery and modal
+// call catch method to handle any other errors that will occur 
 window.addEventListener('load', () => {
     for(let i = 0; i < 12; i++) {
-    fetchData('https://randomuser.me/api/')
+    fetchData(employeesUrl)
         .then(data => {
              addUsers(data);
              usersDetailDisplay(data);
-        });
+        })
+        .catch(error => console.log(error));
     }
 });
 
@@ -24,9 +34,13 @@ function createModalDiv() {
  * @param {string} url - link to API
  */
 async function fetchData(url) {
-    const response = await fetch(url);
-    const data = response.json();
-    return data;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    }catch(error) {
+        throw error; 
+    }
 }
 
 /**
@@ -94,8 +108,16 @@ function usersDetailDisplay(data) {
     document.querySelector('.modal-container').innerHTML += html;
 }
 
-// invoke function to create modal container
-createModalDiv();
+function createSearch() {
+    const html = `
+        <form action="#" method="get">
+            <input type="search" id="search-input" class="search-input" placeholder="Search...">
+            <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+        </form>
+    `;
+
+    document.querySelector('.search-container').innerHTML = html;
+}
 
 /**
  * add event listener to open modal when name or image is clicked
