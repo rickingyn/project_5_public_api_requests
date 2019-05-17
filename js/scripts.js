@@ -14,8 +14,10 @@ addModalToggle();
 window.addEventListener('load', () => {
     fetchData(employeesUrl)
         .then(data => {
-             addUsers(data);
-             usersDetailDisplay(data);
+            data.results.forEach(result => {
+                addUsers(result);
+                usersDetailDisplay(result);
+            });
         })
         .catch(error => console.log(error));
 });
@@ -46,13 +48,11 @@ async function fetchData(url) {
  * function to dynamically add users to web page
  * @param {Object} data - JSON response from fetched users data
  */
-function addUsers(users) {
-    console.log(users)
-    users.results.forEach(user => {
-        const imageThumbnail = user.picture.large;
-        const name = `${user.name.first} ${user.name.last}`;
-        const email = user.email;
-        const location = user.location;
+function addUsers(data) {
+        const imageThumbnail = data.picture.large;
+        const name = `${data.name.first} ${data.name.last}`;
+        const email = data.email;
+        const location = data.location;
     
         // Use string interpolation to create HTML to add to gallery container
         const html = `
@@ -71,7 +71,6 @@ function addUsers(users) {
         // add html to gallery container
         gallery.innerHTML += html;
 
-    });
 }
 
 /**
@@ -79,12 +78,12 @@ function addUsers(users) {
  * @param {Object} data - takes user's data object fetched from API
  */
 function usersDetailDisplay(data) {
-    const image = data.results[0].picture.large;
-    const name = `${data.results[0].name.first} ${data.results[0].name.last}`;
-    const email = data.results[0].email;
-    const location = data.results[0].location;
-    const cellphone = data.results[0].cell;
-    const dob = data.results[0].dob.date;
+    const image = data.picture.large;
+    const name = `${data.name.first} ${data.name.last}`;
+    const email = data.email;
+    const location = data.location;
+    const cellphone = data.cell;
+    const dob = data.dob.date;
     const year = dob.substring(0,4);
     const month = dob.substring(5,7);
     const day = dob.substring(8,10);
