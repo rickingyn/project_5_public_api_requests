@@ -2,7 +2,7 @@ const gallery = document.querySelector('#gallery');
 
 // add query string to API URL to retrieve a user nationality that will only return data in the English alphabet
 const englishNationalities =  'au,br,ca,ch,de,dk,es,fi,fr,gb,ie,no,nl,nz,us';
-const employeesUrl = `https://randomuser.me/api/?nat=${englishNationalities}`;
+const employeesUrl = `https://randomuser.me/api/?nat=${englishNationalities}&results=12`;
 
 // invoke function to create modal container, search form and modal toggle
 createModalDiv();
@@ -12,14 +12,12 @@ addModalToggle();
 // fetch data from API for 12 users on load; call functions to add user to gallery and modal
 // call catch method to handle any other errors that will occur 
 window.addEventListener('load', () => {
-    for(let i = 0; i < 12; i++) {
     fetchData(employeesUrl)
         .then(data => {
              addUsers(data);
              usersDetailDisplay(data);
         })
         .catch(error => console.log(error));
-    }
 });
 
 // create function to add div element for the modal container
@@ -48,28 +46,32 @@ async function fetchData(url) {
  * function to dynamically add users to web page
  * @param {Object} data - JSON response from fetched users data
  */
-function addUsers(data) {
-    const imageThumbnail = data.results[0].picture.large;
-    const name = `${data.results[0].name.first} ${data.results[0].name.last}`;
-    const email = data.results[0].email;
-    const location = data.results[0].location;
-
-    // Use string interpolation to create HTML to add to gallery container
-    const html = `
-    <div class="card">
-        <div class="card-img-container">
-            <img class="card-img" src="${imageThumbnail}" alt="profile picture">
-        </div>
+function addUsers(users) {
+    console.log(users)
+    users.results.forEach(user => {
+        const imageThumbnail = user.picture.large;
+        const name = `${user.name.first} ${user.name.last}`;
+        const email = user.email;
+        const location = user.location;
     
-        <div class="card-info-container">
-            <h3 id="name" class="card-name cap">${name}</h3>
-            <p class="card-text">${email}</p>
-            <p class="card-text cap">${location.city}, ${location.state}</p>
+        // Use string interpolation to create HTML to add to gallery container
+        const html = `
+        <div class="card">
+            <div class="card-img-container">
+                <img class="card-img" src="${imageThumbnail}" alt="profile picture">
+            </div>
+        
+            <div class="card-info-container">
+                <h3 id="name" class="card-name cap">${name}</h3>
+                <p class="card-text">${email}</p>
+                <p class="card-text cap">${location.city}, ${location.state}</p>
+            </div>
         </div>
-    </div>
-    `;
-    // add html to gallery container
-    gallery.innerHTML += html;
+        `;
+        // add html to gallery container
+        gallery.innerHTML += html;
+
+    });
 }
 
 /**
