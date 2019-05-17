@@ -135,21 +135,17 @@ function addModalToggle() {
 }
 
 /**
- * add event listener to open modal when name or image is clicked
- * checks modal to match selected user's name and display users detail
+ * add event listener to loop through each cards; 
+ * open modal when card is clicked
+ * display modal details of user in the current index in forEach loop
  */
 gallery.addEventListener('click', event => {
-    if(event.target.className === 'card-name cap' || event.target.className === 'card-img') {
-        document.querySelector('.modal-container').style.display = "block";     
-        
-        document.querySelectorAll('.modal-name.cap').forEach(name => {
-            const targetedName = event.target.parentNode.parentNode.children[1].children[0].textContent;
-
-            if(name.textContent === targetedName) {
-                name.parentNode.parentNode.style.display = 'block';
-            }
-        });   
-    }
+    document.querySelectorAll('.card').forEach((card, index) => {
+        if(event.composedPath().includes(card)) {
+            document.querySelector('.modal-container').style.display = "block";     
+            document.querySelectorAll('.modal')[index].style.display = "block";
+        }
+    });
 });
 
 /**
