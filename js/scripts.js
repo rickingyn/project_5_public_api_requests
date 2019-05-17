@@ -141,6 +141,7 @@ function addModalToggle() {
  */
 gallery.addEventListener('click', event => {
     document.querySelectorAll('.card').forEach((card, index) => {
+        // check to see if the selected path includes the card element in the current loop of arrays
         if(event.composedPath().includes(card)) {
             document.querySelector('.modal-container').style.display = "block";     
             document.querySelectorAll('.modal')[index].style.display = "block";
