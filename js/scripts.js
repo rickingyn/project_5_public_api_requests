@@ -191,8 +191,10 @@ document.querySelector('#search-input').addEventListener('keyup', event => {
     const name = document.querySelectorAll('#name');
     const searchValue = event.target.value.toLowerCase();
 
+    
+
     name.forEach(name => {
-        if(!name.textContent.includes(searchValue)) {
+        if(!name.textContent.toLowerCase().includes(searchValue)) {
             name.parentNode.parentNode.style.display = 'none';
         } else {
             name.parentNode.parentNode.style.display = 'block';
@@ -200,4 +202,3 @@ document.querySelector('#search-input').addEventListener('keyup', event => {
 
     });
 });
-
